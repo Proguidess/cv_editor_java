@@ -12,9 +12,9 @@ public abstract class CV {
 
 	private String name;
 	protected ArrayList<Section> sections;
-	
-	
-	
+
+
+
 	public CV(String name) {
 		this.name = name;
 	}
@@ -23,13 +23,13 @@ public abstract class CV {
 	public String toString() {
 		return name;
 	}
-	
+
 	public ArrayList<Section> getSections() {
 		return sections;
 	}
-	
-	
-	
+
+
+
 	public String getName() {
 		return name;
 	}
@@ -43,10 +43,10 @@ public abstract class CV {
 	}
 
 	public abstract void printTofile();
-	
+
 	public void exportTxt()throws Exception{
 		PrintWriter writer = new PrintWriter(name+".txt", "UTF-8");
-	    
+
 	    boolean n = false;
 	    int i=1;
 		for(Section section: sections){
@@ -58,10 +58,10 @@ public abstract class CV {
 			exportTxt(section, writer);
 			i++;
 		}
-		
+
 	    writer.close();
 	}
-	
+
 	private void exportTxt(Section section, PrintWriter writer) {
 		for(Item i:section.getItems()){
 			BulletList item = (BulletList) i;
@@ -70,7 +70,7 @@ public abstract class CV {
 			}else{
 				writer.println(item.toString());
 			}
-			
+
 			exportTxt(item,writer);
 		}
 		writer.println("----------------------------------------");
@@ -84,7 +84,7 @@ public abstract class CV {
 				exportTxt(bullet,writer,2);
 			}
 		}
-		
+
 	}
 
 	private void exportTxt(Bullet bullet, PrintWriter writer, int i) {
@@ -99,11 +99,11 @@ public abstract class CV {
 			}
 		}
 	}
-	
-	
+
+
 	public static CV importText(String path) throws Exception{
 		BufferedReader in = new BufferedReader(new FileReader(path));
-		
+
 		ArrayList<String> lines = new ArrayList<String>();
 		String line;
 		int type = 0; //0 chrono 1 functional 2 combined
@@ -113,7 +113,7 @@ public abstract class CV {
 				type++;
 			}
 		}
-		
+
 		String name = lines.get(1).split(": ")[1];
 		CV cv = null;
 		if(type == 0){
@@ -123,31 +123,29 @@ public abstract class CV {
 		}else{
 			cv = new CombinedCV(name);
 		}
-		
+
 		int index = 2;
 		line = lines.get(index);
 		int sNum = 0;
-		
+
 		while(index < lines.size()){
 			line = lines.get(index);
 			if(line.contains("------")){
 				sNum++;//next section
 				index++;//jump  section name
 			}else{
-				/*BulletList item = new BulletList(line);
-				cv.getSections().get(sNum).addItem(item);
-				System.out.println(line);*/
 				
+
 				addline(cv.getSections().get(sNum), line);
 			}
 			index++;
 		}
-		
+
 		return cv;
-		
+
 	}
-	
-	
+
+
 
 	private static void addline(Section section, String line) {
 		if(countab(line) == 0){
@@ -159,7 +157,7 @@ public abstract class CV {
 			addline(last, line);
 		}
 	}
-	
+
 	private static void addline(BulletList bulletlist, String line) {
 		if(countab(line) == 0){
 			Bullet bullet = new Bullet(line);
@@ -169,7 +167,7 @@ public abstract class CV {
 			line = line.replaceFirst("	", "");
 			addline(last, line);
 		}
-		
+
 	}
 
 	private static void addline(Bullet parent, String line) {
@@ -181,7 +179,7 @@ public abstract class CV {
 			line = line.replaceFirst("	", "");
 			addline(last, line);
 		}
-		
+
 	}
 
 	private static int countab(String s){
@@ -189,21 +187,21 @@ public abstract class CV {
 		for( int i=0; i<s.length(); i++ ) {
 		    if( s.charAt(i) == '\t' ) {
 		        counter++;
-		    } 
+		    }
 		}
 		return counter;
 	}
 
 	/***********************latex********************************/
-	
+
 	public void exportLatex() throws Exception{
 		PrintWriter writer = new PrintWriter(name+".tex", "UTF-8");
-	    
+
 	    writer.println("\\documentclass{article}");
 	    writer.println("\\begin{document} ");
-	    
+
 	    boolean n = false;
-	    
+
 		for(Section section: sections){
 			writer.println("\\section{"+section.getTitle()+"}");
 			writer.println("\\begin{itemize}");
@@ -214,7 +212,7 @@ public abstract class CV {
 			exportLatex(section, writer);
 			writer.println("\\end{itemize}");
 		}
-		
+
 		writer.println("\\end{document} ");
 	    writer.close();
 	}
@@ -230,9 +228,9 @@ public abstract class CV {
 				writer.println("\\item "+item.toString());
 				exportLatex(item,writer);
 			}
-			
+
 		}
-		
+
 	}
 
 	protected void exportLatex(BulletList item, PrintWriter writer) {
@@ -245,7 +243,7 @@ public abstract class CV {
 			}
 			writer.println("\\end{itemize}");
 		}
-		
+
 	}
 
 	private void exportLatex(Bullet bullet, PrintWriter writer) {
@@ -259,26 +257,26 @@ public abstract class CV {
 			writer.println("\\end{itemize}");
 		}
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	public static CV importLatex(String path) throws Exception{
 		BufferedReader in = new BufferedReader(new FileReader(path));
-		
+
 		int type = 0; //0 chrono 1 functional 2 combined
-		
+
 		String line;
 		in.readLine();
 		in.readLine();
 		in.readLine();
 		in.readLine();
-		
+
 		line = in.readLine();
 		String name = line.split(": ")[1];
-		
+
 		ArrayList<Item> personal = new ArrayList<Item>();
 		while((line = in.readLine()) != null){
 			if(line.contains("end{itemize}")){
@@ -289,14 +287,14 @@ public abstract class CV {
 		}
 		Section pers = new Section("PERSONAL INFORMATION");
 		pers.setItems(personal);
-		
+
 		ArrayList<Section> sections = new ArrayList<Section> ();
 		sections.add(pers);
 		while((line = in.readLine()) != null){
 			if(line.contains("SKILLS AND EXPERIENCE") || line.contains("PROFESSIONAL EXPERIENCE")){
 				type++;
 			}
-			
+
 			if(line.contains("section")){
 				String s1 = line.split("section")[1];
 				Section s = new Section(s1.substring(1, s1.length()-1));
@@ -305,7 +303,7 @@ public abstract class CV {
 				updateSection(sections.get(sections.size()-1),in);
 			}
 		}
-		
+
 		CV cv = null;
 		if(type == 0){
 			cv = new ChronologicalCV(name);
@@ -315,9 +313,9 @@ public abstract class CV {
 			cv = new CombinedCV(name);
 		}
 		cv.setSections(sections);
-		
+
 		return cv;
-		
+
 	}
 
 	private static void updateSection(Section section, BufferedReader in) throws Exception {
@@ -333,7 +331,7 @@ public abstract class CV {
 					String item = line.split("item ")[1];
 					section.addItem(factorItem(item));
 				}
-				
+
 			}else if(line.contains("begin{itemize}")){
 				ArrayList<Item> items = section.getItems();
 				updateBulletList((BulletList) items.get(items.size()-1),in);
@@ -341,7 +339,7 @@ public abstract class CV {
 		}
 	}
 
-	
+
 
 	private static void updateBulletList(BulletList bulletList, BufferedReader in) throws Exception {
 		String line;
@@ -356,10 +354,10 @@ public abstract class CV {
 				updateBullet(bullets.get(bullets.size()-1),in);
 			}
 		}
-		
+
 	}
 
-	
+
 
 	private static void updateBullet(Bullet bullet, BufferedReader in) throws Exception {
 		String line;
@@ -374,15 +372,15 @@ public abstract class CV {
 				updateBullet(bullets.get(bullets.size()-1),in);
 			}
 		}
-		
+
 	}
 
 	private static BulletList factorItem(String str) {
-		
+
 		if(str.contains("SKILLS AND EXPERIENCE ON ")){
 			str = str.split("SKILLS AND EXPERIENCE ON ")[1];
 		}
-		
+
 		String []spl = str.split(", ");
 		if(spl.length <=1){
 			return new BulletList(str);
@@ -401,12 +399,12 @@ public abstract class CV {
 			}
 		}
 	}
-	
+
 	public CV differencesWith(CV other){
 		if(!this.name.equals(other.name)){
 			return null;
 		}
-		
+
 		CV cv = null;
 		if(this instanceof ChronologicalCV){
 			cv = new ChronologicalCV(name);
@@ -415,19 +413,19 @@ public abstract class CV {
 		}else if(this instanceof CombinedCV){
 			cv = new CombinedCV(name);
 		}
-		
+
 		for(int i=0;i<sections.size();i++){
 			Section s1 = this.sections.get(i);
 			Section s2 = other.sections.get(i);
 			Section s = cv.sections.get(i);
-			
+
 			for(Item item: s1.getItems()){
 				BulletList b = (BulletList) item;
 				if(!s2.containsBulletList(b)){
 					s.addItem(b);
 				}
 			}
-			
+
 			for(Item item: s2.getItems()){
 				BulletList b = (BulletList) item;
 				if(!s1.containsBulletList(b)){
@@ -437,13 +435,13 @@ public abstract class CV {
 		}
 		return cv;
 	}
-	
-	
+
+
 	public CV intersectWith(CV other){
 		if(!this.name.equals(other.name)){
 			return null;
 		}
-		
+
 		CV cv = null;
 		if(this instanceof ChronologicalCV){
 			cv = new ChronologicalCV(name);
@@ -452,12 +450,12 @@ public abstract class CV {
 		}else if(this instanceof CombinedCV){
 			cv = new CombinedCV(name);
 		}
-		
+
 		for(int i=0;i<sections.size();i++){
 			Section s1 = this.sections.get(i);
 			Section s2 = other.sections.get(i);
 			Section s = cv.sections.get(i);
-			
+
 			for(Item item: s1.getItems()){
 				BulletList b = (BulletList) item;
 				if(s2.containsBulletList(b)){
@@ -467,12 +465,12 @@ public abstract class CV {
 		}
 		return cv;
 	}
-	
+
 	public static CV merge (CV intersections, CV differences){
 		for(int i=0;i<intersections.getSections().size();i++){
 			Section s1 = intersections.getSections().get(i);
 			Section s2 = differences.getSections().get(i);
-			
+
 			for(Item item: s2.getItems()){
 				BulletList b = (BulletList) item;
 				s1.addItem(b);
@@ -481,6 +479,6 @@ public abstract class CV {
 		return intersections;
 	}
 
-	
-	
+
+
 }
