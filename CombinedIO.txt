@@ -1,0 +1,37 @@
+1. GENERAL INFORMATION
+Name: CombinedIO
+Phone: 123456
+Address: add 1
+----------------------------------------
+2. PROFFESSIONAL PROFILE
+Java engineer
+----------------------------------------
+3. SKILLS AND EXPERIENCE
+SKILLS AND EXPERIENCE ON Java
+SKILLS AND EXPERIENCE ON Python
+----------------------------------------
+4. PROFESSIONAL EXPERIENCE
+Google, 2015-01-01
+	java
+		test
+			Gui
+			backend
+		design
+	C++
+Facebook, Ioannina, 2016-01-01
+----------------------------------------
+5. EDUCATION AND TRAINING
+Computer science University of Ioannina, 2015-01-01
+----------------------------------------
+6. FURTHER COURSES
+Programming in C, 2015-01-01
+Programming in Haskell, 2016-01-01
+----------------------------------------
+7. ADDITIONAL INFORMATION
+Information part A
+Information part B
+----------------------------------------
+8. INTERESTS
+Football
+Basketball
+----------------------------------------
